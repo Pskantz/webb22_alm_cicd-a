@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Print deployment message
-        run: echo "now deploying branch: ${{ github.ref }} to the test server"
+        run:  "echo now deploying branch: ${{ github.ref }} to the test server"
 
   fake-deploy-production:
     runs-on: ubuntu-latest
