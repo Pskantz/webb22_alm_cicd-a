@@ -3,7 +3,12 @@ env:
   commonjs: true
   es2021: true
 extends: eslint:recommended
-overrides: []
+overrides:
+  - files: "*.js"
+    rules:
+      "no-unused-vars": ["error", { "argsIgnorePattern": "next" }]
+  - files: "*.test.js"
+    rules:
+      "no-unused-vars": "off"
 parserOptions:
   ecmaVersion: latest
-rules: { "no-unused-vars": ["error", { argsIgnorePattern: "next" }] }
