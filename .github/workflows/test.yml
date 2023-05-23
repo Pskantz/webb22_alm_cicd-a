@@ -3,17 +3,16 @@ name: test
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     branches:
-      - 'main'
+      - "main"
 
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -24,7 +23,7 @@ jobs:
 
       - name: Run linting
         run: npm run lint
-        
+
       - name: Run Unit Test
         run: npm run test
 
