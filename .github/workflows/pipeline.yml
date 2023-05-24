@@ -1,60 +1,35 @@
 name: Pipeline
 
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - 'main'
+  push:
+    branches:
+      - 'main'
 
 jobs:
-  unit-tests:
+  echo_branch:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.5.0
-      - name: Run unit tests
-        run: npm run test
 
-  linting:
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.5.0
-      - name: Install dependencies
-        run: npm install
-      - name: Run linting
-        run: npm run lint
+      - name: Test runs on main
+        run: 'echo Branch: main'
 
-  supertest:
+  check_unit_test:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.5.0
-      - name: Install dependencies
-        run: npm install
-      - name: Run supertest
-        run: npm run supertest
 
-  fake-deploy-test:
-    needs: unit-tests
-    runs-on: ubuntu-latest
     steps:
-      - name: Fake deploy to test server
-        run: |
-          echo "now deploying branch: ${{ github.head_ref_name }} to the test server"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
 
-  fake-deploy-production:
-    needs: [unit-tests, linting, supertest]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fake deploy to production
-        if: github.ref == 'refs/heads/main'
-        run: echo "now deploying to production"
+      - name: package install
+        run: 'npm i'
 
-  build-and-publish:
-    needs: [unit-tests, linting, supertest]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2.5.0
-      - name: Build and publish Docker image
-        run: |
-          docker build -t my-image .
-          docker tag my-image ghcr.io/Pskantz/my-image:latest
-          docker push ghcr.io/Pskantz/my-image:latest
+      - name: units tests
+        run: 'npm run test'
+
+      - name: lint test
+        run: 'npm run lint'
